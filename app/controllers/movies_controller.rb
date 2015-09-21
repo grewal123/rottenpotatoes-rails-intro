@@ -11,14 +11,23 @@ class MoviesController < ApplicationController
   end
 
   def index
+  @all_ratings = []
+  @all_ratings = Movie.uniq.pluck(:rating)
   if params["sort"] == "Movie_Title"
     @movies = Movie.all.sort_by { |movie| movie.title } 
     @hilitetitle = "hilite"
   elsif params["sort"] == "Release_Date"
     @movies = Movie.all.sort_by { |movie| movie.release_date } 
     @hiliterelease = "hilite"
-  else
-    @movies = Movie.all
+  elsif params[:ratings] != nil
+       current = [] 
+     params[:ratings].each do |key,value|
+     	current += [key]
+     end
+      @movies = Movie.where(:rating => current)
+    else
+     @movies = Movie.all
+    
   end
   end
 
