@@ -3,7 +3,7 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]" , 1 , false ,:id => 'ratings_{#rating}'
+    = check_box_tag "ratings[#{rating}]" , 1 , true ,:id => 'ratings_{#rating}'
   = submit_tag 'Refresh' ,:id=> 'rating_form'
 %h1 All Movies
 %table#movies

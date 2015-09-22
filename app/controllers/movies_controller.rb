@@ -19,12 +19,18 @@ class MoviesController < ApplicationController
   session[:sort] = params[:sort]
   elsif session[:sort] !=nil
   @sort  = session[:sort]
+  if @sort == "Release_Date"
+  redirect_to movies_path(:id => "release_date_header",:sort => @sort)
+  elsif @sort =="Movie_Title"
+  redirect_to movies_path(:id => "title_date_header",:sort => @sort)
+  end
   end
   if params[:ratings]!= nil
   @rating = params[:ratings]
   session[:ratings] = params[:ratings]
   elsif session[:ratings] !=nil
   @rating  = session[:ratings]
+  redirect_to movies_path(:ratings => @rating)
   end
   if @sort == "Movie_Title"
   @movies = Movie.all.sort_by { |movie| movie.title } 
