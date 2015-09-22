@@ -12,25 +12,44 @@ class MoviesController < ApplicationController
 
   def index
   @all_ratings = []
+  #reset_session
   @all_ratings = Movie.uniq.pluck(:rating)
-  if params["sort"] == "Movie_Title"
-    @movies = Movie.all.sort_by { |movie| movie.title } 
+  if params[:sort]!= nil
+  @sort = params[:sort]
+  session[:sort] = params[:sort]
+  elsif session[:sort] !=nil
+  @sort  = session[:sort]
+  end
+  if params[:ratings]!= nil
+  @rating = params[:ratings]
+  session[:ratings] = params[:ratings]
+  elsif session[:ratings] !=nil
+  @rating  = session[:ratings]
+  end
+  if @sort == "Movie_Title"
+  @movies = Movie.all.sort_by { |movie| movie.title } 
     @hilitetitle = "hilite"
-  elsif params["sort"] == "Release_Date"
+    end
+    if @sort == "Release_Date"
     @movies = Movie.all.sort_by { |movie| movie.release_date } 
     @hiliterelease = "hilite"
-  elsif params[:ratings] != nil
-       current = [] 
-     params[:ratings].each do |key,value|
+    end
+    if @rating != nil
+       current = []
+     @rating.each do |key,value|
      	current += [key]
      end
       @movies = Movie.where(:rating => current)
-    else
-     @movies = Movie.all
-    
+      end
+    if @sort == nil && @rating == nil
+    @movies = Movie.all
+    end
   end
-  end
-
+  
+  
+  
+  
+  
   def new
     # default: render 'new' template
   end
