@@ -27,7 +27,7 @@ class MoviesController < ApplicationController
   session[:ratings] = params[:ratings]
   elsif session[:ratings] !=nil
   @rating  = session[:ratings]
-  redirect = true
+  @redirect = true
   end
   if @sort == "Movie_Title"
   @movies = Movie.all.sort_by { |movie| movie.title } 
@@ -46,8 +46,14 @@ class MoviesController < ApplicationController
       end
     if @sort == nil && @rating == nil
     @movies = Movie.all
-    if redirect ==true
-    redirect_to movies_path(:rating => @rating, :sort=>@sort )
+    end
+   if @redirect ==true
+   flash.keep
+   if @sort=="Movie_Title"
+    redirect_to movies_path(:id => 'title_header',:sort=>@sort,:ratings=> @rating)
+    end
+    if @sort=="Release_Date"
+    redirect_to movies_path(:id => 'release_date_header',:sort=>@sort,:ratings=>@rating)
     end
     end
   end
