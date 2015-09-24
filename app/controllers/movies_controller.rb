@@ -11,6 +11,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+ # @movies =Movie.new
   @all_ratings = []
   #reset_session
   @redirect = false
@@ -29,7 +30,31 @@ class MoviesController < ApplicationController
   @rating  = session[:ratings]
   @redirect = true
   end
+  if @rating != nil
+       current = []
+     @rating.each do |key,value|
+     	current += [key]
+     end
+      end
+      if @sort!= nil && @rating!=nil
   if @sort == "Movie_Title"
+  @movies = Movie.where(:rating => current)
+  @movies = @movies.all.sort_by { |movie| movie.title } 
+  
+    @hilitetitle = "hilite"
+    end
+    if @sort == "Release_Date"
+    @movies = Movie.where(:rating => current)
+    @movies = @movies.all.sort_by { |movie| movie.release_date } 
+    
+    @hiliterelease = "hilite"
+    end
+    end
+    if @sort == nil && @rating!=nil
+    @movies = Movie.where(:rating => current)
+    end
+    if @sort != nil && @rating==nil
+    if @sort == "Movie_Title"
   @movies = Movie.all.sort_by { |movie| movie.title } 
     @hilitetitle = "hilite"
     end
@@ -37,13 +62,8 @@ class MoviesController < ApplicationController
     @movies = Movie.all.sort_by { |movie| movie.release_date } 
     @hiliterelease = "hilite"
     end
-    if @rating != nil
-       current = []
-     @rating.each do |key,value|
-     	current += [key]
-     end
-      @movies = Movie.where(:rating => current)
-      end
+    end
+    
     if @sort == nil && @rating == nil
     @movies = Movie.all
     end
